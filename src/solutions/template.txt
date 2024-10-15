@@ -1,0 +1,11 @@
+#include "../one_solution.h"
+
+SOLVER(20xx, d, 1, false)
+(const std::string &in) {
+    return "n/a";
+}
+
+SOLVER(20xx, d, 2, false)
+(const std::string &in) {
+    return "n/a";
+}
