@@ -2,12 +2,12 @@
 
 constexpr const std::string_view EXAMPLE_INPUT_1 = R"()";
 
-SOLVER(20xx, d, 1, false)
+SOLVER(2023, 12, 1, false)
 (const std::string &in) {
     return "n/a";
 }
 
-SOLVER(20xx, d, 2, false)
+SOLVER(2023, 12, 2, false)
 (const std::string &in) {
     return "n/a";
 }

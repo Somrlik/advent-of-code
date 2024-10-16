@@ -15,7 +15,8 @@ set(AOC_SOURCES
         src/trim.cpp
         src/download.cpp
         src/solutions.cpp
-        src/solutions/string_split.hpp src/solutions/2023/03.cpp)
+        src/solutions/string_split.cpp
+        src/solutions/2023/05.cpp src/solutions/2023/06.cpp src/solutions/2023/07.cpp src/solutions/2023/08.cpp src/solutions/2023/09.cpp src/solutions/grid.cpp src/solutions/grid.h src/solutions/2023/11.cpp src/solutions/2023/12.cpp)
 file(GLOB_RECURSE AOC_SOLUTIONS CONFIGURE_DEPENDS src/solutions/*.cpp src/solutions/*.hpp)
 
 # Make the cli

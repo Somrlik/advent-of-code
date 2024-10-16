@@ -1,6 +1,7 @@
 #include "../one_solution.h"
 
 #include "../../trim.h"
+#include "../grid.h"
 
 #include <cctype>
 #include <vector>
@@ -26,37 +27,7 @@ typedef struct Symbol {
     std::set<NumberSpanningCells, decltype(cmp)> adjacent_numbers;
 } Symbol;
 
-typedef struct Cell {
-    uint row;
-    uint column;
-} Cell;
-
-typedef struct Grid {
-    std::size_t rows;
-    std::size_t columns;
-    const std::string data;
-
-    [[nodiscard]]
-    char at(const std::size_t& column, const std::size_t& row) const noexcept {
-        if (column >= columns) {
-            return '\0';
-        }
-
-        if (row >= rows) {
-            return '\0';
-        }
-
-        // +1 is for \n
-        return data.at(column + ((columns + 1) * row));
-    }
-
-    [[nodiscard]]
-    std::string substr(const std::size_t& column, const std::size_t& length, const std::size_t& row) const noexcept {
-        return data.substr(column + ((columns + 1) * row), length);
-    }
-} Grid;
-
-std::optional<NumberSpanningCells> find_number_spanning_cells(const Grid& grid, const Cell& cell) {
+std::optional<NumberSpanningCells> find_number_spanning_cells(const Grid& grid, const GridCell& cell) {
     if (std::isdigit(grid.at(cell.column, cell.row))) {
         std::size_t starting_col = cell.column;
         std::size_t ending_col = cell.column;
@@ -88,8 +59,8 @@ std::optional<NumberSpanningCells> find_number_spanning_cells(const Grid& grid, 
     return std::nullopt;
 }
 
-std::set<NumberSpanningCells, decltype(cmp)> scan_for_numbers_around(const Grid& grid, const Cell& cell) {
-    std::vector<Cell> to_scan = {
+std::set<NumberSpanningCells, decltype(cmp)> scan_for_numbers_around(const Grid& grid, const GridCell& cell) {
+    std::vector<GridCell> to_scan = {
             {cell.row - 1, cell.column - 1},
             {cell.row - 1, cell.column + 0},
             {cell.row - 1, cell.column + 1},

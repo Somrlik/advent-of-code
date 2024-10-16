@@ -39,7 +39,7 @@ static std::string ask_for_key() {
 }
 
 int main(int argc, char* argv[]) {
-    // fmtlog::startPollingThread();
+    fmtlog::startPollingThread();
 
     cxxopts::Options options("aoc", R"HELP(
 CLI utility for adventofcode.com

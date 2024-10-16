@@ -1,9 +1,5 @@
-#ifndef AOC_STRING_SPLIT_HPP
-#define AOC_STRING_SPLIT_HPP
-
-#include <string>
+#include "./string_split.h"
 #include <sstream>
-#include <vector>
 
 std::vector<std::string> string_split(const std::string &in, const char& delimiter) {
     std::vector<std::string> tokens;
@@ -31,5 +27,3 @@ std::vector<std::string> string_split(const std::string &in, const std::string &
 
     return tokens;
 }
-
-#endif
