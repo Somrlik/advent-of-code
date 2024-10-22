@@ -21,7 +21,6 @@ typedef struct Grid {
     std::size_t rows;
     std::size_t columns;
     std::string data;
-    bool lines_contain_newlines = true;
 
     [[nodiscard]]
     char at(const std::size_t& column, const std::size_t& row) const noexcept;
@@ -33,6 +32,14 @@ typedef struct Grid {
 
     [[nodiscard]]
     std::string substr(const std::size_t& column, const std::size_t& length, const std::size_t& row) const noexcept;
+
+    void add_row(const std::string &row);
+    void add_column(const std::string &row);
+
+    void add_row_start(const std::string &row);
+    void add_column_start(const std::string &row);
+
+    void rotate_cw();
 } Grid;
 
 Grid make_grid(const std::string &in);

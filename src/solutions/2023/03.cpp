@@ -84,19 +84,12 @@ std::set<NumberSpanningCells, decltype(cmp)> scan_for_numbers_around(const Grid&
 }
 
 std::vector<Symbol> find_symbols(const std::string &in) {
-    auto trimmed = trim(in);
-    std::size_t columns = trimmed.find('\n');
-    if (columns == std::string::npos) {
-        throw std::logic_error("Could not determine number of columns");
-    }
-
-    std::size_t rows = std::count(trimmed.begin(), trimmed.end(), '\n') + 1;
-    Grid grid = {rows, columns, trimmed};
+    Grid grid = make_grid(in);
 
     std::vector<Symbol> symbols;
 
-    for (uint row = 0; row < rows; row++) {
-        for (uint column = 0; column < columns; column++) {
+    for (uint row = 0; row < grid.rows; row++) {
+        for (uint column = 0; column < grid.columns; column++) {
             const char c = grid.at(column, row);
             if (!std::isdigit(c) && c != '.' && !std::isspace(c)) {
                 auto adjacent_numbers = scan_for_numbers_around(grid, {row, column});

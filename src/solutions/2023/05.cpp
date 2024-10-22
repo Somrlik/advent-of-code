@@ -44,21 +44,23 @@ humidity-to-location map:
 56 93 4
 )";
 
-typedef struct MapItem {
-    ulong source_start;
-    ulong destination_start;
-    ulong length;
-} MapItem;
+namespace {
+    typedef struct MapItem {
+        ulong source_start;
+        ulong destination_start;
+        ulong length;
+    } MapItem;
 
-typedef struct Map {
-    std::string name;
-    const std::vector<MapItem> items;
-} Map;
+    typedef struct Map {
+        std::string name;
+        const std::vector<MapItem> items;
+    } Map;
 
-struct parse_maps_return {
-    std::vector<uint> seeds;
-    std::map<std::string, Map> maps;
-};
+    struct parse_maps_return {
+        std::vector<uint> seeds;
+        std::map<std::string, Map> maps;
+    };
+}
 
 struct parse_maps_return parse_maps(const std::string& in) {
     auto splits = string_split(trim(in), "\n\n");

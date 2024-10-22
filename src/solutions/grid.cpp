@@ -29,7 +29,7 @@ char Grid::at(const std::size_t& column, const std::size_t& row) const noexcept 
     }
 
     // +1 is for \n
-    return data.at(column + ((columns + (lines_contain_newlines ? 1 : 0)) * row));
+    return data.at(column + ((columns) * row));
 }
 
 [[nodiscard]]
@@ -39,11 +39,94 @@ char Grid::at(const GridCell& cell) const noexcept {
 
 [[nodiscard]]
 std::string Grid::substr(const std::size_t& column, const std::size_t& length, const std::size_t& row) const noexcept {
-    return data.substr(column + ((columns + 1) * row), length);
+    return data.substr(column + ((columns) * row), length);
 }
 
 void Grid::set_value(const GridCell& cell, const char& c) {
-    data[(cell.column + ((columns + (lines_contain_newlines ? 1 : 0)) * cell.row))] = c;
+    data[(cell.column + ((columns) * cell.row))] = c;
+}
+
+void Grid::add_row(const std::string &row) {
+    auto trimmed_row = trim(row);
+    if (trimmed_row.size() != columns) {
+        throw std::logic_error("The inserted row must be as long as the number of columns");
+    }
+
+    data.append(trimmed_row);
+    rows++;
+}
+
+void Grid::add_column(const std::string &column) {
+    auto trimmed_column = trim(column);
+    if (trimmed_column.size() != rows) {
+        throw std::logic_error("The inserted column must be as long as the number of rows");
+    }
+
+    uint row_idx = 0;
+    for (char column_idx : trimmed_column) {
+        data.insert(columns + ((columns + row_idx) * row_idx), 1, column_idx);
+        row_idx++;
+    }
+    columns++;
+}
+
+void Grid::add_row_start(const std::string &row) {
+    auto trimmed_row = trim(row);
+    if (trimmed_row.size() != columns) {
+        throw std::logic_error("The inserted row must be as long as the number of columns");
+    }
+
+    data.insert(0, trimmed_row);
+    rows++;
+}
+
+void Grid::add_column_start(const std::string &column) {
+    auto trimmed_column = trim(column);
+    if (trimmed_column.size() != rows) {
+        throw std::logic_error("The inserted column must be as long as the number of rows");
+    }
+
+    uint row_idx = 0;
+    for (char column_idx : trimmed_column) {
+        data.insert(0 + ((columns + row_idx) * row_idx), 1, column_idx);
+        row_idx++;
+    }
+    columns++;
+}
+
+void Grid::rotate_cw() {
+    // It is probably(???) easier to rotate when represented as distinct rows and columns
+    // It would be prescient to do it in-place but I'm drunk right now
+
+    // Create 2 dimensional vector
+    std::vector<std::vector<char>> split_grid(rows, std::vector<char>(columns));
+    int idx = 0;
+    for (int r = 0; r < rows; r++) {
+        for (int c = 0; c < columns; c++) {
+            split_grid[r][c] = data[idx++];
+        }
+    }
+
+    // Create a rotated 2 dimensional vector
+    std::vector<std::vector<char>> rotated_grid(columns, std::vector<char>(rows));
+    for (int r = 0; r < rows; ++r) {
+        for (int c = 0; c < columns; ++c) {
+            rotated_grid[c][rows - 1 - r] = split_grid[r][c];
+        }
+    }
+
+    // Convert 2d to data string
+    std::string new_data;
+    for (int r = 0; r < columns; ++r) {
+        for (int c = 0; c < rows; ++c) {
+            new_data += rotated_grid[r][c];
+        }
+    }
+
+    data = new_data;
+    auto tmp = columns;
+    columns = rows;
+    rows = tmp;
 }
 
 Grid make_grid(const std::string &in) {
@@ -59,16 +142,12 @@ Grid make_grid(const std::string &in) {
         return c == '\n';
     }), trimmed.end());
     
-    return Grid{rows, columns, trimmed, false};
+    return Grid{rows, columns, trimmed};
 }
 
 void draw_grid(const Grid &grid) {
-    if (grid.lines_contain_newlines) {
-        fmt::println("{}", grid.data);
-    } else {
-        for (std::size_t row = 0; row < grid.rows; row++) {
-            fmt::println("{}", grid.data.substr(0 + (row * grid.columns), grid.columns));
-        }
+    for (std::size_t row = 0; row < grid.rows; row++) {
+        fmt::println("{}", grid.data.substr(0 + (row * grid.columns), grid.columns));
     }
     fmt::println("------------------------------------");
 }

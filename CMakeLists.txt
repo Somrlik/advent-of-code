@@ -12,11 +12,12 @@ project(aoc VERSION 2024 DESCRIPTION "AdventOfCode Solutions by somrlik" LANGUAG
 # Get sources
 set(AOC_SOURCES
         src/storage.cpp
-        src/trim.cpp
         src/download.cpp
         src/solutions.cpp
+        src/trim.cpp
         src/solutions/string_split.cpp
-        src/solutions/2023/05.cpp src/solutions/2023/06.cpp src/solutions/2023/07.cpp src/solutions/2023/08.cpp src/solutions/2023/09.cpp src/solutions/grid.cpp src/solutions/grid.h src/solutions/2023/11.cpp src/solutions/2023/12.cpp)
+        src/solutions/grid.cpp
+)
 file(GLOB_RECURSE AOC_SOLUTIONS CONFIGURE_DEPENDS src/solutions/*.cpp src/solutions/*.hpp)
 
 # Make the cli
@@ -60,7 +61,6 @@ target_include_directories(aoc PRIVATE
 )
 target_link_libraries(aoc PRIVATE
     fmt::fmt
-    ${AOC_LIBS}
 )
 target_compile_features(aoc PRIVATE cxx_std_20)
 install(TARGETS aoc
@@ -100,16 +100,23 @@ FetchContent_MakeAvailable(googletest)
 
 # Get all the tests and link the test executable
 set(TEST_EXECUTABLE_TARGET aoc-test)
+set(TEST_SOURCES
+        src/trim.cpp
+        src/solutions/string_split.cpp
+        src/solutions/grid.cpp
+        )
 file(GLOB_RECURSE TEST_FILES CONFIGURE_DEPENDS test/*.cpp test/*.hpp)
 
 add_executable(${TEST_EXECUTABLE_TARGET}
     ${TEST_FILES}
 )
-target_sources(${TEST_EXECUTABLE_TARGET} PRIVATE ${TEST_FILES})
+target_compile_features(${TEST_EXECUTABLE_TARGET} PRIVATE cxx_std_20)
+target_sources(${TEST_EXECUTABLE_TARGET} PRIVATE ${TEST_FILES} ${TEST_SOURCES})
 
 target_link_libraries(
         ${TEST_EXECUTABLE_TARGET}
         GTest::gtest_main
+        fmt::fmt
 )
 
 include(GoogleTest)
