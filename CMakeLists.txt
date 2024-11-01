@@ -18,7 +18,7 @@ set(AOC_SOURCES
         src/solutions/string_split.cpp
         src/solutions/grid.cpp
         src/solutions/Graph.cpp
-      )
+        src/solutions/2022/01.cpp src/solutions/2022/02.cpp src/solutions/2022/03.cpp src/solutions/2022/04.cpp src/solutions/2022/05.cpp src/solutions/2022/06.cpp src/solutions/2022/07.cpp src/solutions/2022/08.cpp src/solutions/2022/09.cpp)
 file(GLOB_RECURSE AOC_SOLUTIONS CONFIGURE_DEPENDS src/solutions/*.cpp src/solutions/*.hpp)
 
 # Make the cli

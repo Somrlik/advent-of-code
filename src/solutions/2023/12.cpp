@@ -249,6 +249,8 @@ uint determine_line_possibilities(const Line &line) {
         }
 
     }
+
+    return 0;
 }
 
 SOLVER(2023, 12, 1, true)

@@ -209,7 +209,7 @@ bool has_puzzle_input(uint year, uint day) noexcept {
 std::string get_puzzle_input(uint year, uint day) {
     const path puzzle_input_file = determine_storage_dir() / INPUTS_DIR_NAME / get_file_name_for_puzzle_input(year, day);
     logd("getting puzzle input from file {}", puzzle_input_file.string());
-    auto puzzle_input = trim(get_file_contents(puzzle_input_file));
+    auto puzzle_input = trim_only_newlines(get_file_contents(puzzle_input_file));
     logd("got an input that is {} characters long", puzzle_input.length());
     return puzzle_input;
 }
