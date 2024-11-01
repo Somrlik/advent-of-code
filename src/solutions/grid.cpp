@@ -5,8 +5,9 @@
 #include "../trim.h"
 #include "fmt/format.h"
 
+// Logic ops
 bool GridCell::operator==(const GridCell& other) const {
-    return row == other.row && column == other.column;
+    return (row == other.row) && (column == other.column);
 }
 
 bool GridCell::operator!=(const GridCell& other) const {
@@ -17,6 +18,34 @@ bool GridCell::operator<(const GridCell &other) const {
     if (row != other.row) return row < other.row;
     return column < other.column;
 }
+
+// Addition
+GridCell &GridCell::operator+=(const GridCell &rhs) {
+    this->column += rhs.column;
+    this->row += rhs.row;
+    return *this;
+}
+
+GridCell operator+(GridCell lhs, const GridCell &rhs) {
+    return GridCell{lhs.row + rhs.row, lhs.column + rhs.column};
+}
+
+// Subtraction
+GridCell &GridCell::operator-=(const GridCell &rhs) {
+    this->column -= rhs.column;
+    this->row -= rhs.row;
+    return *this;
+}
+
+GridCell operator-(GridCell lhs, const GridCell &rhs) {
+    return GridCell{lhs.row - rhs.row, lhs.column - rhs.column};
+}
+
+// Multiplication
+GridCell GridCell::operator*(long multiplier) const {
+    return GridCell{row * multiplier, column * multiplier};
+}
+
 
 [[nodiscard]]
 char Grid::at(const std::size_t& column, const std::size_t& row) const noexcept {
@@ -42,8 +71,12 @@ std::string Grid::substr(const std::size_t& column, const std::size_t& length, c
     return data.substr(column + ((columns) * row), length);
 }
 
-void Grid::set_value(const GridCell& cell, const char& c) {
-    data[(cell.column + ((columns) * cell.row))] = c;
+bool Grid::set_value(const GridCell& cell, const char& c) {
+    if (this->contains(cell)) {
+        data[(cell.column + ((columns) * cell.row))] = c;
+        return true;
+    }
+    return false;
 }
 
 void Grid::add_row(const std::string &row) {
@@ -56,6 +89,11 @@ void Grid::add_row(const std::string &row) {
     rows++;
 }
 
+void Grid::add_row(const char &character) {
+    std::string new_row(this->columns, character);
+    this->add_row(new_row);
+}
+
 void Grid::add_column(const std::string &column) {
     auto trimmed_column = trim(column);
     if (trimmed_column.size() != rows) {
@@ -64,10 +102,19 @@ void Grid::add_column(const std::string &column) {
 
     uint row_idx = 0;
     for (char column_idx : trimmed_column) {
-        data.insert(columns + ((columns + row_idx) * row_idx), 1, column_idx);
+        if (row_idx >= (this->rows - 1)) {
+            data.insert(data.end(), column_idx);
+        } else {
+            data.insert(columns + (columns * row_idx) + row_idx, 1, column_idx);
+        }
         row_idx++;
     }
     columns++;
+}
+
+void Grid::add_column(const char &character) {
+    std::string new_column(this->rows, character);
+    this->add_column(new_column);
 }
 
 void Grid::add_row_start(const std::string &row) {
@@ -127,6 +174,10 @@ void Grid::rotate_cw() {
     auto tmp = columns;
     columns = rows;
     rows = tmp;
+}
+
+bool Grid::contains(const GridCell &cell) const {
+    return (0 <= cell.row && cell.row < this->rows) && (0 <= cell.column && cell.column < this->columns);
 }
 
 Grid make_grid(const std::string &in) {

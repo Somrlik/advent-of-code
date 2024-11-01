@@ -46,7 +46,7 @@ TEST(Grid, add_row_start) {
 }
 
 TEST(grid, add_column) {
-    auto grid = make_grid("..\n..\n");
+    auto grid = make_grid("..\n..");
 
     ASSERT_EQ(grid.columns, 2);
     ASSERT_EQ(grid.rows, 2);
@@ -64,6 +64,42 @@ TEST(grid, add_column) {
     ASSERT_EQ(grid.at({1, 0}), '.');
     ASSERT_EQ(grid.at({1, 1}), '.');
     ASSERT_EQ(grid.at({1, 2}), '#');
+}
+
+TEST(grid, add_row_char) {
+    auto grid = make_grid(".");
+    ASSERT_EQ(grid.columns, 1);
+    ASSERT_EQ(grid.rows, 1);
+
+    grid.add_column('.');
+    grid.add_column('.');
+
+    for (int i = 0; i < 9; ++i) {
+        grid.add_row('.');
+    }
+
+    ASSERT_EQ(grid.columns, 3);
+    ASSERT_EQ(grid.rows, 10);
+}
+
+TEST(grid, add_column_char) {
+    auto grid = make_grid(".");
+    ASSERT_EQ(grid.columns, 1);
+    ASSERT_EQ(grid.rows, 1);
+
+    grid.add_row('.');
+    grid.add_row('.');
+
+    for (int i = 0; i < 9; ++i) {
+        grid.add_column(std::to_string(i).at(0));
+    }
+
+    ASSERT_EQ(grid.columns, 10);
+    ASSERT_EQ(grid.rows, 3);
+
+    ASSERT_EQ(grid.at({0, 9}), '8');
+    ASSERT_EQ(grid.at({1, 9}), '8');
+    ASSERT_EQ(grid.at({2, 9}), '8');
 }
 
 TEST(grid, add_column_start) {

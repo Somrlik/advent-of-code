@@ -10,6 +10,7 @@
 #include <iostream>
 #include <fstream>
 #include <filesystem>
+#include <chrono>
 
 constexpr const uint YEAR_FROM = 2015;
 constexpr const uint DAY_FROM = 1;
@@ -197,9 +198,13 @@ for puzzles from adventofcode.com.
             fmt::println("! This puzzle is NOT solved !");
         }
 
+        const auto start = std::chrono::high_resolution_clock::now();
         std::string solution = run_solver(year, day, level, puzzle_input);
+        const auto finish = std::chrono::high_resolution_clock::now();
+        const std::chrono::duration<double, std::milli> elapsed = finish - start;
 
         fmt::println("The solution is: '{}'", solution);
+        fmt::println("Elapsed time: {:.0f}ms", elapsed.count());
 
         if (!is_solved(year, day, level)) {
             fmt::println("! This puzzle is NOT solved !");

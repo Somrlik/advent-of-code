@@ -17,7 +17,8 @@ set(AOC_SOURCES
         src/trim.cpp
         src/solutions/string_split.cpp
         src/solutions/grid.cpp
-)
+        src/solutions/Graph.cpp
+      )
 file(GLOB_RECURSE AOC_SOLUTIONS CONFIGURE_DEPENDS src/solutions/*.cpp src/solutions/*.hpp)
 
 # Make the cli
@@ -104,6 +105,7 @@ set(TEST_SOURCES
         src/trim.cpp
         src/solutions/string_split.cpp
         src/solutions/grid.cpp
+        src/solutions/Graph.cpp
         )
 file(GLOB_RECURSE TEST_FILES CONFIGURE_DEPENDS test/*.cpp test/*.hpp)
 

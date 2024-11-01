@@ -4,18 +4,21 @@
 #include <string>
 
 typedef struct GridCell {
-    uint row;
-    uint column;
+    long row;
+    long column;
 
     bool operator==(const GridCell& other) const;
     bool operator!=(const GridCell& other) const;
     bool operator<(const GridCell& other) const;
-} GridCell;
 
-typedef struct GridMathVector {
-    short row;
-    short column;
-} GridMathVector;
+    GridCell& operator+=(const GridCell& rhs);
+    friend GridCell operator+(GridCell lhs, const GridCell& rhs);
+
+    GridCell& operator-=(const GridCell& rhs);
+    friend GridCell operator-(GridCell lhs, const GridCell& rhs);
+
+    GridCell operator*(long multiplier) const;
+} GridCell;
 
 typedef struct Grid {
     std::size_t rows;
@@ -28,13 +31,25 @@ typedef struct Grid {
     [[nodiscard]]
     char at(const GridCell&) const noexcept;
 
-    void set_value(const GridCell& cell, const char& c);
+    /**
+     * Sets value of cell
+     *
+     * @param cell cell to set
+     * @param c character to set to
+     * @return true if the position is inside grid, false if it is outside
+     */
+    bool set_value(const GridCell& cell, const char& c);
 
     [[nodiscard]]
     std::string substr(const std::size_t& column, const std::size_t& length, const std::size_t& row) const noexcept;
 
+    [[nodiscard]] bool contains(const GridCell& cell) const;
+
     void add_row(const std::string &row);
+    void add_row(const char &character);
+
     void add_column(const std::string &row);
+    void add_column(const char &character);
 
     void add_row_start(const std::string &row);
     void add_column_start(const std::string &row);

@@ -31,7 +31,21 @@ static const std::map<WalkDirection, int> direction_to_cw_rotations = {
         {WEST,  3},
 };
 
+static std::map<std::pair<std::string, WalkDirection>, std::string> walk_boulders_cache{};
+static bool used_cache = false;
+
 static Grid walk_boulders(const Grid& in_grid, const WalkDirection& direction) {
+    auto cache_key = std::pair<std::string, WalkDirection>{in_grid.data, direction};
+    if (walk_boulders_cache.contains(cache_key)) {
+        used_cache = true;
+        return Grid{
+            in_grid.rows,
+            in_grid.columns,
+            walk_boulders_cache.at(cache_key),
+        };
+    }
+    used_cache = false;
+
     auto grid = in_grid; // Copy the grid
 
     // 1. Rotate the grid to point north, since I am lazy to actually solve properly for other directions
@@ -79,6 +93,8 @@ static Grid walk_boulders(const Grid& in_grid, const WalkDirection& direction) {
     for (int rotation = 0; rotation < back_cw_rotations; rotation++) {
         grid.rotate_cw();
     }
+
+    walk_boulders_cache.insert({cache_key, grid.data});
 
     return grid;
 }
@@ -144,9 +160,10 @@ SOLVER(2023, 14, 2, false)
         }
     });
 
-    for (;current_cycle < CYCLES; current_cycle++) {
+    for (; current_cycle < CYCLES; current_cycle++) {
         for (const auto& direction: directions) {
             walked_boulders = walk_boulders(walked_boulders, direction);
+            if (!used_cache) fmt::println("cycle {} has not used cache", current_cycle);
         }
     }
     progress_thread.join();
