@@ -17,7 +17,7 @@ constexpr const uint DAY_FROM = 1;
 constexpr const uint DAY_TO = 25;
 
 static bool is_valid_puzzle_number(uint year, uint day) {
-    if (YEAR_FROM >= year) {
+    if (YEAR_FROM > year) {
         return false;
     }
 

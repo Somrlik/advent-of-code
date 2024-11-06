@@ -57,7 +57,6 @@ char Grid::at(const std::size_t& column, const std::size_t& row) const noexcept 
         return '\0';
     }
 
-    // +1 is for \n
     return data.at(column + ((columns) * row));
 }
 
@@ -180,6 +179,23 @@ bool Grid::contains(const GridCell &cell) const {
     return (0 <= cell.row && cell.row < this->rows) && (0 <= cell.column && cell.column < this->columns);
 }
 
+ulong Grid::underlying_idx(const GridCell &cell) const {
+    return cell.column + (columns * cell.row);
+}
+
+GridCell Grid::underlying_idx_to_cell(ulong idx) const {
+    return GridCell{(long)idx / ((long)columns), (long)idx % (long)columns};
+}
+
+GridCell Grid::find_first(const char &c) const {
+    for (long row = 0; row < rows; ++row) {
+        for (long column = 0; column < columns; ++column) {
+            if (at(column, row) == c) return GridCell{row, column};
+        }
+    }
+    throw std::out_of_range("character not found");
+}
+
 Grid make_grid(const std::string &in) {
     std::string trimmed = trim(in);
     auto lines = string_split(trimmed, '\n');
@@ -201,4 +217,16 @@ void draw_grid(const Grid &grid) {
         fmt::println("{}", grid.data.substr(0 + (row * grid.columns), grid.columns));
     }
     fmt::println("------------------------------------");
+}
+
+std::string draw_grid_to_string(const Grid& grid) {
+    std::string str;
+    for (std::size_t row = 0; row < grid.rows; row++) {
+        str += fmt::format("{}\n", grid.data.substr(0 + (row * grid.columns), grid.columns));
+    }
+    return str;
+}
+
+Grid make_grid(std::size_t rows, std::size_t columns, char fill_char) {
+    return Grid{rows, columns, std::string(rows * columns, fill_char)};
 }

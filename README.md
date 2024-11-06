@@ -15,7 +15,11 @@ Compiles on `GNU 11.4.0` for linux, might compile for other targets.
   - `cmake`
 - Optionally requires
   - `curl` for downloading of puzzle inputs
+    - Can be specified with `-DUSE_CURL`
   - `openssl` for some puzzles
+    - Can be specified with `-DUSE_OPENSSL`
+- Optional dependencies 
+
 
 1. `cmake -S . -B build`
 2. `cmake --build build`
@@ -23,6 +27,12 @@ Compiles on `GNU 11.4.0` for linux, might compile for other targets.
 
 Running
 -------
+
+Upon first run without supplying the input file, you will be asked to 
+provide your aoc session cookie. It is then saved in `${XDG_DATA_HOME}/.aoc` or in `~/.aoc`.
+
+No clue where it would be saved on windows.
+
 ```
 ./build/aoc --help
 ```

@@ -21,6 +21,9 @@ public:
     void add_undirected_edge(long source, long weight, long destination);
 
     std::vector<long> dijkstra(long start);
+    std::vector<long> dijkstra_with_path(long source, long target);
+
+    [[nodiscard]] std::vector<Edge> get_edges(long node) const;
 };
 
 #endif

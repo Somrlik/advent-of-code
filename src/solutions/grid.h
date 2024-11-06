@@ -55,9 +55,16 @@ typedef struct Grid {
     void add_column_start(const std::string &row);
 
     void rotate_cw();
+
+    [[nodiscard]] GridCell find_first(const char &c) const;
+
+    [[nodiscard]] ulong underlying_idx(const GridCell& cell) const;
+    [[nodiscard]] GridCell underlying_idx_to_cell(ulong idx) const;
 } Grid;
 
 Grid make_grid(const std::string &in);
+Grid make_grid(std::size_t rows, std::size_t columns, char fill_char);
 void draw_grid(const Grid& grid);
+std::string draw_grid_to_string(const Grid& grid);
 
 #endif

@@ -48,3 +48,44 @@ std::vector<long> Graph::dijkstra(long start) {
 
     return distances;
 }
+
+std::vector<long> Graph::dijkstra_with_path(long source, long target) {
+    std::vector<long> distances;
+    std::vector<long> parents;
+
+    distances.assign(this->node_count, std::numeric_limits<long>::max());
+    parents.assign(this->node_count, -1); // Initialize all parents to -1
+
+    std::priority_queue<std::pair<long, long>, std::vector<std::pair<long, long>>, std::greater<>> pq;
+    pq.emplace(0, source);
+    distances[source] = 0;
+
+    while (!pq.empty()) {
+        long dist = pq.top().first;
+        long u = pq.top().second;
+        pq.pop();
+
+        if (dist > distances[u]) continue; // Skip if we've found a shorter path
+
+        for (auto& edge : this->edges[u]) {
+            long v = edge.destination;
+
+            if (distances[u] + edge.weight < distances[v]) {
+                distances[v] = distances[u] + edge.weight;
+                parents[v] = u;
+                pq.emplace(distances[v], v);
+            }
+        }
+    }
+
+    std::vector<long> path;
+    for (long v = target; v != -1; v = parents[v]) {
+        path.push_back(v);
+    }
+    reverse(path.begin(), path.end());
+    return path;
+}
+
+std::vector<Edge> Graph::get_edges(long node) const {
+    return std::vector<Edge>{edges.at(node)};
+}

@@ -2,6 +2,9 @@
 #define AOC_ONE_SOLUTION_H
 
 #include "../solutions.h"
+// I use the splitting and trimming pretty much all the time
+#include "../trim.h"
+#include "./string_split.h"
 
 #include <string>
 #include <fmtlog.h>
